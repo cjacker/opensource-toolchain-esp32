@@ -10,6 +10,16 @@ Please refer to "[Standard Toolchain Setup for Linux and macOS](https://docs.esp
 
 Since official documents is good enough, this tutorial is only a brief note for Linux.
 
+# Table of contents
+- [Hardware prerequiest](#hardware-prerequiest)
+- [Toolchain overview](#toolchain-overview)
+- [Compiler](#compiler)
+- [SDK](#sdk)
+  + [get ESP-IDF](#get-esp-idf)
+  + [Install toolchains and tools](#install-toolchains-and-tools)
+  + [Build blink demo](#build-blink-demo)
+  + 
+
 # Hardware prerequiest
 - A ESP32 devboard, S3 is recommended when this tutorial written, C3 is the RISC-V version.
 - JTAG debugger for ESP32 and ESP32 S2, such as FTDI
@@ -18,7 +28,7 @@ Since official documents is good enough, this tutorial is only a brief note for 
 
 # Toolchain overview
 - Compiler: xtensa (ARM) GNU Toolchain for ESP32 and ESP32S series, RISC-V GNU Toolchain for ESP32C series.
-- SDK: ESP-IDF, **partial open source, most libraries of ble and wifi is released in binary form**
+- SDK: ESP-IDF, **partial open source, most libraries of ble and wifi are released in binary form**
 - Programming tool: esptool.py
 - Debugging: ESP32 OpenOCD / gdb
 
@@ -38,8 +48,7 @@ mkdir -p ~/esp && cd ~/esp
 git clone --recursive https://github.com/espressif/esp-idf.git
 ```
 
-## Install toolchains, various tools and python modules for ESP-IDF
-
+## Install toolchains and tools
 After git clone finished, before you start using ESP-IDF, you need to setup toolchains and various other tools for it. ESP-IDF provide a helper script to make things easier
 
 ```
