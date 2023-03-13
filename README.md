@@ -17,7 +17,7 @@ Since official documents is good enough, this tutorial is only a brief note for 
 
 # Toolchain overview
 - Compiler: xtensa (ARM) GNU Toolchain for ESP32 and ESP32S series, RISC-V GNU Toolchain for ESP32C series.
-- SDK: ESP-IDF **partial open source, libraries of ble and wifi is released in binary form**
+- SDK: ESP-IDF, **partial open source, most libraries of ble and wifi is released in binary form**
 - Programming tool: esptool.py
 - Debugging: ESP32 OpenOCD / gdb
 
