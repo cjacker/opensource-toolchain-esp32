@@ -92,6 +92,8 @@ idf.py flash
 
 After programming successfully, the WS2812 RGB LED on ESP32S3 devboard will blink.
 
+A lot of variant devboards may have no LED on board, please check the schematic of your devboard.
+
 
 
 
