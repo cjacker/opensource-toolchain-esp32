@@ -141,7 +141,7 @@ Refer to next section about how to connect the JTAG interface and how to build a
 # Debugging
 The key software and hardware components that perform debugging of ESP32 with OpenOCD over JTAG (Joint Test Action Group) interface is presented in the diagram below:
 
-<img src="./jtag-debugging-overview.jpg" />
+<img src="./jtag-debugging-overview.jpg" width="50%" />
 
 Only ESP32 and ESP32 S2 require an external JTAG debugger. ESP32 S3 / C3 and above have builtin JTAG debug unit and it's not necessary to use external JTAG debugger with them (it does support external JTAG, but need burn eFues, and burning eFuses is an irreversible operation)
 
