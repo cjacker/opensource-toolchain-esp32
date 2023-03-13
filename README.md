@@ -1,8 +1,8 @@
-# Opensource toolchain tutorial for espressif ESP32
+# Opensource toolchain tutorial for Espressif ESP32
 
 ESP32 is a series of low-cost, low-power system on a chip microcontrollers with integrated Wi-Fi and dual-mode Bluetooth. The ESP32 series employs either a Tensilica Xtensa LX6 microprocessor in both dual-core and single-core variations, Xtensa LX7 dual-core microprocessor or a single-core RISC-V microprocessor and includes built-in antenna switches, RF balun, power amplifier, low-noise receive amplifier, filters, and power-management modules. ESP32 is created and developed by Espressif Systems, a Shanghai-based Chinese company, and is manufactured by TSMC using their 40 nm process. It is a successor to the ESP8266 microcontroller. 
 
-Since the release of the original ESP32, a number of variants have been introduced and announced, includes ESP32, ESP32S2 / S3, and RISC-V series ESP32C3 / C6 / C5 / H2 / P4.
+Since the release of the original ESP32, a number of variants have been introduced and announced, includes ARM series ESP32, ESP32S2 / S3, and RISC-V series ESP32C3 / C6 / C5 / H2 / P4, etc.
 
 ESP32 have very good official tutorials at https://docs.espressif.com/projects/esp-idf/en/latest/esp32/.
 
@@ -18,7 +18,14 @@ Since official documents is good enough, this tutorial is only a brief note for 
   + [get ESP-IDF](#get-esp-idf)
   + [Install toolchains and tools](#install-toolchains-and-tools)
   + [Build blink demo](#build-blink-demo)
-  + 
+- [Programming](#programming)
+  + [with esptool.py](#with-esptoolpy)
+  + [with esp32-openocd](#with-esp32-openocd)
+- [Debugging](#debugging)
+  + [Install esp32-openocd](#install-esp32-openocd)
+  + [JTAG pinout of ESP32 and ESP32 S2](#jtag-pinout)
+  + [Launch OpenOCD](#launch-openocd)
+  + [Debug](#debug)
 
 # Hardware prerequiest
 - A ESP32 devboard, S3 is recommended when this tutorial written, C3 is the RISC-V version.
@@ -39,7 +46,7 @@ These triplets will be used when you launch gdb to debug your program.
 
 # SDK
 
-ESP-IDF, the *Espressif Iot Development Framework* is the official standard SDK for ESP32 series. There are a lot of development frameworks for ESP32, I will focus on esp-idf in this tutorial.
+ESP-IDF, the *Espressif Iot Development Framework* is the official standard SDK for ESP32 series. There are also a lot of thirdparty SDKs for different languagesd suchas micropython, luatos, etc, they all build upon ESP-IDF. you should learn ESP-IDF first.
 
 ## get ESP-IDF
 
