@@ -2,7 +2,7 @@
 
 ESP32 is a series of low-cost, low-power system on a chip microcontrollers with integrated Wi-Fi and dual-mode Bluetooth. The ESP32 series employs either a Tensilica Xtensa LX6 microprocessor in both dual-core and single-core variations, Xtensa LX7 dual-core microprocessor or a single-core RISC-V microprocessor and includes built-in antenna switches, RF balun, power amplifier, low-noise receive amplifier, filters, and power-management modules. ESP32 is created and developed by Espressif Systems, a Shanghai-based Chinese company, and is manufactured by TSMC using their 40 nm process. It is a successor to the ESP8266 microcontroller. 
 
-Since the release of the original ESP32, a number of variants have been introduced and announced, includes ARM series ESP32, ESP32S2 / S3, and RISC-V series ESP32C3 / C6 / C5 / H2 / P4, etc.
+Since the release of the original ESP32, a number of variants have been introduced and announced, includes Xtensa series ESP32, ESP32S2 / S3, and RISC-V series ESP32C3 / C6 / C5 / H2 / P4, etc.
 
 ESP32 have very good official tutorials at https://docs.espressif.com/projects/esp-idf/en/latest/esp32/.
 
@@ -34,7 +34,7 @@ Since official documents is good enough, this tutorial is only a brief note for 
   + NOTE 2: Only ESP32 and ESP32 S2 require an external JTAG debugger, ESP32 S3 / C3 and above have builtin jtag debug unit.
 
 # Toolchain overview
-- Compiler: xtensa (ARM) GNU Toolchain for ESP32 and ESP32S series, RISC-V GNU Toolchain for ESP32C series.
+- Compiler: Xtensa GNU Toolchain for ESP32 and ESP32S series, RISC-V GNU Toolchain for ESP32C series.
 - SDK: ESP-IDF, **partial open source, most libraries of ble and wifi are released in binary form**
 - Programming tool: esptool.py
 - Debugging: ESP32 OpenOCD / gdb
