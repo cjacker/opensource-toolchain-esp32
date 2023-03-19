@@ -194,13 +194,16 @@ Since ESP32 S3 / C3 and above have builtin JTAG debug unit, I will not list JTAG
 
 ## Launch OpenOCD
 
-### For ESP32 and ESP32 S2
+### For ESP32, ESP32 S2 and ESP32 C2
 
 Since it requires external JTAG debugger, the jtag interface config file depends on which JTAG debugger you use. In this tutorial, I use FT2232D, launch esp32-openocd as:
 
 ```
 esp32-openocd -f <path to>/ft2232d.cfg -f <find it from esp32-openocd installation dir>/esp32.cfg
 ```
+
+Change `esp32.cfg` to `esp32s2.cfg` or `esp32c2.cfg` for s2 or c2 devboard.
+
 
 ### For ESP32 S3 / C3 and above
 
