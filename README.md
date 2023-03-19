@@ -30,10 +30,12 @@ Since official documents is good enough, this tutorial is only a brief note for 
   + [Debug](#debug)
 
 # Hardware prerequiest
-- A ESP32 devboard, S3 is recommended when this tutorial written, C3 is the RISC-V version.
-- JTAG debugger for ESP32 and ESP32 S2, such as FTDI
-  + NOTE 1: ESP32 doesn't support SWD interface, you can not use DAP-Link with ESP32.
-  + NOTE 2: Only ESP32 and ESP32 S2 require an external JTAG debugger, ESP32 S3 / C3 and above have builtin jtag debug unit.
+- A ESP32 devboard
+  + I will use ESP32, S2, S3 and C2 / C3 in this tutorial.
+  + S3 and C3/C6 is the latest model and recommended when this tutorial written. C3 is the RISC-V version, C6 is on the way.
+- JTAG debugger for ESP32 and ESP32 S2, such as FTDI JTAG debugger or JLink
+  + NOTE 1: ESP32 doesn't support SWD interface, you can NOT use DAP-Link with ESP32.
+  + NOTE 2: Only ESP32 and ESP32 S2 / C2 require an external JTAG debugger, ESP32 S3 / C3 and above have builtin jtag debug unit.
 
 # Toolchain overview
 - Compiler: Xtensa GNU Toolchain for ESP32 and ESP32S series, RISC-V GNU Toolchain for ESP32C series.
