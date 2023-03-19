@@ -119,11 +119,16 @@ The upstream programming tool is `esptool.py`, it is already installed when we s
 Usually an ESP32S3/C3 devboard has one or two USB port exported, one is UART, and another one is builtin JTAG debug unit, both can be used for programming, you can use `lsusb` to identify the USB ports after connecting devboard to PC USB port.
 
 To programming the firmwares to target ESP32 device:
+
 ```
 idf.py flash
 ```
 
 After programming successfully, the WS2812 RGB LED on ESP32S3 devboard will blink. A lot of variant devboards may have no LED on board, please check the schematic of your devboard.
+
+**NOTE**
+
+I noticed some ESP32S2 devboards (such as lolin S2 mini) need to **hold the boot button down, toggle reset button and release boot button** to enter flash mode. and such a devboard also can not reset before or after flashing, you need press reset button manually to reset. Maybe There are also some error outputs when `idf.py flash`, you can try run `idf.py menuconfig`, goto `Serial flasher config` menu, and change `Before flashing` to `no reset` , and change `After flashing` to `stay in bootloader`.
 
 ## with esp32-openocd
 esp32-openocd can be used to upload firmware to target device by such command:
