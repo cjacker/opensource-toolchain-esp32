@@ -172,14 +172,15 @@ The openocd command for esp32 will be `esp32-openocd`.
 
 ## JTAG pinout
 
-Refer to below table to wire up Jtag debugger with esp32 or esp32 s2:
+Refer to below table to wire up Jtag debugger with esp32 or s2 or c2:
 
-| jtag | esp32   | esp32 s2 |
-|------|---------|----------|
-| TDO  | GPIO 15 | GPIO 40  |
-| TDI  | GPIO 12 | GPIO 41  |
-| TCK  | GPIO 13 | GPIO 39  |
-| TMS  | GPIO 14 | GPIO 42  |
+| jtag | esp32   | esp32 s2 | esp32 c2 |
+|------|---------|----------|----------|
+| TDO  | GPIO 15 | GPIO 40  | GPIO 7   |
+| TDI  | GPIO 12 | GPIO 41  | GPIO 5   |
+| TCK  | GPIO 13 | GPIO 39  | GPIO 6   |
+| TMS  | GPIO 14 | GPIO 42  | GPIO 4   |
+
 
 Since ESP32 S3 / C3 and above have builtin JTAG debug unit, I will not list JTAG pins of those chips and will not mention about how to use external JTAG debugger. Please refer to schematics of your devboard, use `lsusb` to figure out which port belongs to builtin JTAG and connect it to PC USB port, the `lsusb` output should look like:
 ```
@@ -195,6 +196,7 @@ Since it requires external JTAG debugger, the jtag interface config file depends
 ```
 esp32-openocd -f <path to>/ft2232d.cfg -f <find it from esp32-openocd installation dir>/esp32.cfg
 ```
+
 ### For ESP32 S3 / C3 and above
 
 ESP32 S3 / C3 and above have builting JTAG debug unit, launch esp32 openocd for ESP32 S3 as:
