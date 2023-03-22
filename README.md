@@ -1,6 +1,6 @@
 # Opensource toolchain tutorial for Espressif ESP32
 
-For classic ESP8266 and An-Thinker ESP-1S, please refer to https://github.com/cjacker/opensource-toolchain-esp8266, and ESP32-C2/C3 is recommended to use instead to replace ESP8266.
+For classic ESP8266 and Ai-Thinker ESP-1S, please refer to https://github.com/cjacker/opensource-toolchain-esp8266, and ESP32-C2/C3 is recommended to use instead to replace ESP8266.
 
 ESP32 is a series of low-cost, low-power system on a chip microcontrollers with integrated Wi-Fi and dual-mode Bluetooth. The ESP32 series employs either a Tensilica Xtensa LX6 microprocessor in both dual-core and single-core variations, Xtensa LX7 dual-core microprocessor or a single-core RISC-V microprocessor and includes built-in antenna switches, RF balun, power amplifier, low-noise receive amplifier, filters, and power-management modules. ESP32 is created and developed by Espressif Systems, a Shanghai-based Chinese company, and is manufactured by TSMC using their 40 nm process. It is a successor to the ESP8266 microcontroller. 
 
@@ -25,7 +25,7 @@ Since official documents is good enough, this tutorial is only a brief note for 
   + [with esp32-openocd](#with-esp32-openocd)
 - [Debugging](#debugging)
   + [Install esp32-openocd](#install-esp32-openocd)
-  + [JTAG pinout of ESP32 and ESP32 S2](#jtag-pinout)
+  + [JTAG pinout of ESP32 / S2 / C2](#jtag-pinout)
   + [Launch OpenOCD](#launch-openocd)
   + [Debug](#debug)
 
