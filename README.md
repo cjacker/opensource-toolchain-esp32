@@ -152,7 +152,7 @@ The key software and hardware components that perform debugging of ESP32 with Op
 
 <img src="./jtag-debugging-overview.jpg" width="50%" />
 
-Only ESP32 and ESP32 S2 require an external JTAG debugger. ESP32 S3 / C3 and above have builtin JTAG debug unit and it's not necessary to use external JTAG debugger with them (it does support external JTAG, but need burn eFues, and burning eFuses is an irreversible operation)
+Only ESP32 and ESP32 S2/C2 require an external JTAG debugger. ESP32 S3 / C3 and above have builtin JTAG debug unit and it's not necessary to use external JTAG debugger with them (it does support external JTAG, but need burn eFues, and burning eFuses is an irreversible operation)
 
 ## Install esp32-openocd
 Upstream openocd doesn't support debugging ESP32, you have to use Espressif forked version. 
