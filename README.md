@@ -1,6 +1,6 @@
 # Opensource toolchain tutorial for Espressif ESP32
 
-For classic ESP8266 and Ai-Thinker ESP-1S, please refer to https://github.com/cjacker/opensource-toolchain-esp8266, and ESP32-C2/C3 is recommended to use instead to replace ESP8266.
+For classic ESP8266 and Ai-Thinker ESP-1S, please refer to https://github.com/cjacker/opensource-toolchain-esp8266, and ESP32-C2/C3/C6 is recommended to use instead to replace ESP8266.
 
 ESP32 is a series of low-cost, low-power system on a chip microcontrollers with integrated Wi-Fi and dual-mode Bluetooth. The ESP32 series employs either a Tensilica Xtensa LX6 microprocessor in both dual-core and single-core variations, Xtensa LX7 dual-core microprocessor or a single-core RISC-V microprocessor and includes built-in antenna switches, RF balun, power amplifier, low-noise receive amplifier, filters, and power-management modules. ESP32 is created and developed by Espressif Systems, a Shanghai-based Chinese company, and is manufactured by TSMC using their 40 nm process. It is a successor to the ESP8266 microcontroller. 
 
@@ -31,14 +31,14 @@ Since official documents is good enough, this tutorial is only a brief note for 
 
 # Hardware prerequiest
 - A ESP32 devboard
-  + I will use ESP32, S2, S3 and C2 / C3 in this tutorial.
-  + S3 and C3/C6 is the latest model and recommended when this tutorial written. C3 is the RISC-V version, C6 is on the way.
+  + I will use ESP32, S2, S3 and C2 / C3 / C6 in this tutorial.
+  + S3 and C3/C6 is the latest model and recommended when this tutorial written. S3 is the xtensa version and C3 / C6 is the RISC-V version.
 - JTAG debugger for ESP32 and ESP32 S2, such as FTDI JTAG debugger or JLink
   + NOTE 1: ESP32 doesn't support SWD interface, you can NOT use DAP-Link with ESP32.
-  + NOTE 2: Only ESP32 and ESP32 S2 / C2 require an external JTAG debugger, ESP32 S3 / C3 and above have builtin jtag debug unit.
+  + NOTE 2: Only ESP32 and ESP32 S2 / C2 require an external JTAG debugger, ESP32 S3 / C3 / C6 and above have builtin jtag debug unit.
 
 # Toolchain overview
-- Compiler: Xtensa GNU Toolchain for ESP32 and ESP32S series, RISC-V GNU Toolchain for ESP32C series.
+- Compiler: Xtensa GNU Toolchain for ESP32 and ESP32S series, RISC-V GNU Toolchain for ESP32Cx series.
 - SDK: ESP-IDF, **partial open source, most libraries of ble and wifi are released in binary form**
 - Programming tool: esptool.py
 - Debugging: ESP32 OpenOCD / gdb
@@ -107,6 +107,12 @@ idf.py set-target esp32s3
 idf.py build
 ```
 
+To build other targets:
+```
+idf.py set-target <target model name>
+idf.py build
+```
+
 If you open `main/blink_example_main.c`, you may be curious about where the CONFIG_BLINK_GPIO defined for `#define BLINK_GPIO CONFIG_BLINK_GPIO`, it is defined in `sdkconfig` at current dir. you can run `idf.py menuconfig` to modify this `sdkconfig` file.
 
 After built finished, there are various firmwares generated at `build` dir, it's not necessary to care about it for now, since the programming tool will handle them automatically.
@@ -118,7 +124,7 @@ After built finished, there are various firmwares generated at `build` dir, it's
 
 The upstream programming tool is `esptool.py`, it is already installed when we setup toolchains for esp-idf.
 
-Usually an ESP32S3/C3 devboard has one or two USB port exported, one is UART, and another one is builtin JTAG debug unit, both can be used for programming, you can use `lsusb` to identify the USB ports after connecting devboard to PC USB port.
+Usually an ESP32S3 / C3 / C6 devboard has one or two USB port exported, one is UART, and another one is builtin JTAG debug unit, both can be used for programming, you can use `lsusb` to identify the USB ports after connecting devboard to PC USB port.
 
 To programming the firmwares to target ESP32 device:
 
@@ -130,7 +136,7 @@ After programming successfully, the WS2812 RGB LED on ESP32S3 devboard will blin
 
 **NOTE**
 
-I noticed some ESP32S2 devboards (such as lolin S2 mini) need to **hold the boot button down, toggle reset button and release boot button** to enter flash mode. and such a devboard also can not reset before or after flashing, you need press reset button manually to reset. Maybe There are also some error outputs when `idf.py flash`, you can try run `idf.py menuconfig`, goto `Serial flasher config` menu, and change `Before flashing` to `no reset` , and change `After flashing` to `stay in bootloader`.
+I noticed some ESP32S2 devboards (such as lolin S2 mini) need to **hold the boot button down, toggle reset button and release boot button** to enter flash mode. and such a devboard also can not be reset before or after flashing, you need press reset button manually to reset. Maybe There are also some error outputs when `idf.py flash`, to get rid of these error msgs, you can try run `idf.py menuconfig`, goto `Serial flasher config` menu, and change `Before flashing` to `no reset` , and change `After flashing` to `stay in bootloader`.
 
 ## with esp32-openocd
 esp32-openocd can be used to upload firmware to target device by such command:
