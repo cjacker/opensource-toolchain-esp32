@@ -21,8 +21,6 @@ Since official documents is good enough, this tutorial is only a brief note for 
   + [Install toolchains and tools](#install-toolchains-and-tools)
   + [Build blink demo](#build-blink-demo)
 - [Programming](#programming)
-  + [with esptool.py](#with-esptoolpy)
-  + [with esp32-openocd](#with-esp32-openocd)
 - [Debugging](#debugging)
   + [Install esp32-openocd](#install-esp32-openocd)
   + [JTAG pinout of ESP32 / S2 / C2](#jtag-pinout)
@@ -44,13 +42,11 @@ Since official documents is good enough, this tutorial is only a brief note for 
 - Debugging: ESP32 OpenOCD / gdb
 
 # Compiler
-It's not necessary to build the xtensa or RISC-V toolchain for various ESP32 chips, esp-idf already have toolchain integrated and will download it when setup the esp idf environment. you even have no need to care about where the toolchains installed, what you only need to know is the triplet of xtensa toolchain usually is **`xtensa-esp32xx-elf-`**, `esp32xx` means `esp32`, `esp32s2` and `esp32s3`, and the triplet of RISC-V toolchain usually is **`riscv32-esp-elf-`**.
-
-These triplets will be used when you launch gdb to debug your program.
+It's not necessary to build and install the xtensa or RISC-V toolchain for various ESP32 models, esp-idf already have toolchain integrated and will download and setup when setup the esp-idf environment. What you only need to know is the triplet of xtensa toolchain usually is **`xtensa-esp32xx-elf-`**, `esp32xx` means `esp32`, `esp32s2` and `esp32s3`, and the triplet of RISC-V toolchain usually is **`riscv32-esp-elf-`**. These triplets will be used when you launch corresponding gdb to debug your program.
 
 # SDK
 
-ESP-IDF, the *Espressif Iot Development Framework* is the official standard SDK for ESP32 series. There are also a lot of thirdparty SDKs for different languagesd suchas micropython, luatos, etc, they all build upon ESP-IDF. you should learn ESP-IDF first.
+ESP-IDF, the *Espressif Iot Development Framework* is the official standard SDK for ESP32 series. There are also a lot of thirdparty SDKs for different languages such as micropython, luatos, etc, they all build upon ESP-IDF. you should learn ESP-IDF first.
 
 ## get ESP-IDF
 
@@ -60,16 +56,22 @@ git clone --recursive https://github.com/espressif/esp-idf.git
 ```
 
 ## Install toolchains and tools
-After git clone finished, before you start using ESP-IDF, you need to setup toolchains and various other tools for it. ESP-IDF provide a helper script to make things easier
+After git clone finished, before you start using ESP-IDF, you need to setup toolchains and various other tools. ESP-IDF provide a helper script to make things easier
 
 ```
 cd ~/esp/esp-idf
+
+# remove pre-installed outdated toolchain
+python tools/idf_tools.py uninstall
+
 ./install.sh esp32
 ```
 
-It will download all esp32 toolchains and various other tools from github, and install them inside the user home directory: `$HOME/.espressif` on Linux.
+It will download the latest esp32 toolchains and various other tools from github, and install them to `$HOME/.espressif` on Linux.
 
-If you prefer the Espressif download server when installing tools, you can use:
+Please change `./install.sh esp32` according to your target board, for example, esp32c6 should use `./install.sh esp32c6` command.
+
+If you prefer the Espressif download server instead of github :
 
 ```
 cd ~/esp/esp-idf
@@ -77,12 +79,12 @@ export IDF_GITHUB_ASSETS="dl.espressif.com/github_assets"
 ./install.sh esp32
 ```
 
-After download and setup finished, you may found the `xtensa-esp32s3-elf-gcc` is not on your PATH. you need setup env vars first by:
+After download and setup finished, you need setup ENV first by:
 ```
 . $HOME/esp/esp-idf/export.sh
 ```
 
-If you plan to use esp-idf frequently, please append it to `~/.bashrc`.
+It's better to append it to `~/.bashrc`.
 
 ## Build blink demo
 
@@ -113,14 +115,12 @@ idf.py set-target <target model name>
 idf.py build
 ```
 
-If you open `main/blink_example_main.c`, you may be curious about where the CONFIG_BLINK_GPIO defined for `#define BLINK_GPIO CONFIG_BLINK_GPIO`, it is defined in `sdkconfig` at current dir. you can run `idf.py menuconfig` to modify this `sdkconfig` file.
+If you open `main/blink_example_main.c`, you may be curious about where the CONFIG_BLINK_GPIO defined for `#define BLINK_GPIO CONFIG_BLINK_GPIO`, it is defined in `sdkconfig` at current dir. you can run `idf.py menuconfig` to modify `sdkconfig` file.
 
 After built finished, there are various firmwares generated at `build` dir, it's not necessary to care about it for now, since the programming tool will handle them automatically.
 
 
 # Programming
-
-## with esptool.py
 
 The upstream programming tool is `esptool.py`, it is already installed when we setup toolchains for esp-idf.
 
@@ -138,50 +138,13 @@ After programming successfully, the WS2812 RGB LED on ESP32S3 devboard will blin
 
 I noticed some ESP32S2 devboards (such as lolin S2 mini) need to **hold the boot button down, toggle reset button and release boot button** to enter flash mode. and such a devboard also can not be reset before or after flashing, you need press reset button manually to reset. Maybe There are also some error outputs when `idf.py flash`, to get rid of these error msgs, you can try run `idf.py menuconfig`, goto `Serial flasher config` menu, and change `Before flashing` to `no reset` , and change `After flashing` to `stay in bootloader`.
 
-## with esp32-openocd
-esp32-openocd can be used to upload firmware to target device by such command:
-
-For esp32 with external JTAG debugger:
-```
-esp32-openocd -f <interface config> -f <path to>/esp32.cfg -c "program_esp build/blink.bin 0x10000 verify reset exit"
-```
-
-For esp32s3 with builting JTAG debug unit:
-```
-esp32-openocd -f /usr/share/esp32-openocd/openocd/scripts/board/esp32s3-builtin.cfg -c "program_esp build/blink.bin 0x10000 verify reset exit"
-```
-
-Refer to next section about how to connect the JTAG interface and how to build and use esp32-openocd.
-
 # Debugging
-The key software and hardware components that perform debugging of ESP32 with OpenOCD over JTAG (Joint Test Action Group) interface is presented in the diagram below:
+
+The key software and hardware components that perform debugging of ESP32 with OpenOCD over JTAG interface is presented in the diagram below:
 
 <img src="./jtag-debugging-overview.jpg" width="50%" />
 
-Only ESP32 and ESP32 S2/C2 require an external JTAG debugger. ESP32 S3 / C3 and above have builtin JTAG debug unit and it's not necessary to use external JTAG debugger with them (it does support external JTAG, but need burn eFues, and burning eFuses is an irreversible operation)
-
-## Install esp32-openocd
-Upstream openocd doesn't support debugging ESP32, you have to use Espressif forked version. 
-
-When you setup ESP-IDF SDK, the `esp32-openocd` already installed in `~/.espressif/tools/openocd-esp32/<version>/openocd-esp32` dir. Since the command of esp32-openocd is also `openocd`, most likely it is conflict with the OpenOCD you installed systemwide, please make sure there is no confliction, or rename the esp32 openocd command to `esp32-openocd`.
-
-If you want to build it from sources, follow below steps:
-```
-git clone https://github.com/espressif/openocd-esp32
-cd openocd-esp32
-git submodule update --init --recursive --progress
-
-./bootstrap
-
-./configure --prefix=/usr
-  --disable-werror \
-  --enable-esp-usb-jtag \
-  --datadir=%{_datadir}/esp32-openocd \
-  --program-prefix=esp32-
-```
-
-The openocd command for esp32 will be `esp32-openocd`.
-
+Only ESP32 and ESP32 S2/C2 require an external JTAG debugger. ESP32 S3 / C3 and above have builtin JTAG debug unit and it's not necessary to use external JTAG debugger with them (it does support external JTAG, but need burn eFuses, and burning eFuses is an irreversible operation)
 
 ## JTAG pinout
 
@@ -196,75 +159,71 @@ Refer to below table to wire up Jtag debugger with esp32 or s2 or c2:
 
 
 Since ESP32 S3 / C3 and above have builtin JTAG debug unit, I will not list JTAG pins of those chips and will not mention about how to use external JTAG debugger. Please refer to schematics of your devboard, use `lsusb` to figure out which port belongs to builtin JTAG and connect it to PC USB port, the `lsusb` output should look like:
+
 ```
 303a:1001 Espressif USB JTAG/serial debug unit
 ```
 
-## Launch OpenOCD
+## OpenOCD
+
+Upstream openocd doesn't support debugging ESP32, you have to use Espressif forked version. 
+
+When you setup ESP-IDF SDK, the esp32 openocd already installed in `~/.espressif/tools/openocd-esp32/<version>/openocd-esp32` dir, you can use it directly.
 
 ### For ESP32, ESP32 S2 and ESP32 C2
 
 Since it requires external JTAG debugger, the jtag interface config file depends on which JTAG debugger you use. In this tutorial, I use FT2232D, launch esp32-openocd as:
 
 ```
-esp32-openocd -f <path to>/ft2232d.cfg -f <find it from esp32-openocd installation dir>/esp32.cfg
+openocd -f <path to>/ft2232d.cfg -f <find it from esp32-openocd installation dir>/esp32.cfg
 ```
 
 Change `esp32.cfg` to `esp32s2.cfg` or `esp32c2.cfg` for s2 or c2 devboard.
 
-
 ### For ESP32 S3 / C3 and above
 
-ESP32 S3 / C3 and above have builting JTAG debug unit, launch esp32 openocd for ESP32 S3 as:
+ESP32 S3/C3/C6 and above have builting JTAG debug unit, launch esp32 openocd as:
 
 ```
-esp32-openocd -f <find it from esp32-openocd installation dir>/esp32s3-builtin.cfg
+idf.py openocd
 ```
 
-Change `esp32s3-builtin.cfg` to `esp32c3-builtin.cfg` for ESP32 C3.
-
-The openocd output of ESP32 S3 looks like:
+The openocd output of ESP32 C6 looks like:
 ```
-Open On-Chip Debugger v0.12.0-esp32-20230221-15-g36a99294-dirty (2023-03-13-20:13)
+Executing action: openocd
+Note: OpenOCD cfg not found (via env variable OPENOCD_COMMANDS nor as a --openocd-commands argument)
+OpenOCD arguments default to: "-f board/esp32c6-builtin.cfg"
+OpenOCD started as a background task 1906838
+Executing action: post_debug
+Open On-Chip Debugger v0.12.0-esp32-20241016 (2024-10-16-14:17)
 Licensed under GNU GPL v2
 For bug reports, read
         http://openocd.org/doc/doxygen/bugs.html
 Info : only one transport option; autoselecting 'jtag'
 Info : esp_usb_jtag: VID set to 0x303a and PID to 0x1001
 Info : esp_usb_jtag: capabilities descriptor set to 0x2000
-Warn : Transport "jtag" was already selected
 Info : Listening on port 6666 for tcl connections
 Info : Listening on port 4444 for telnet connections
-Info : esp_usb_jtag: serial (F4:12:FA:FD:24:F4)
-Info : esp_usb_jtag: Device found. Base speed 40000KHz, div range 1 to 255
-Info : clock speed 40000 kHz
-Info : JTAG tap: esp32s3.cpu0 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
-Info : JTAG tap: esp32s3.cpu1 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
-Info : starting gdb server for esp32s3.cpu0 on 3333
+Info : esp_usb_jtag: serial (40:4C:CA:40:7B:B8)
+Info : esp_usb_jtag: Device found. Base speed 24000KHz, div range 1 to 255
+Info : clock speed 24000 kHz
+Info : JTAG tap: esp32c6.tap0 tap/device found: 0x0000dc25 (mfg: 0x612 (Espressif Systems), part: 0x000d, ver: 0x0)
+Info : [esp32c6] datacount=2 progbufsize=16
+Info : [esp32c6] Examined RISC-V core; found 2 harts
+Info : [esp32c6]  XLEN=32, misa=0x40903105
+Info : [esp32c6] Examination succeed
+Info : [esp32c6] starting gdb server on 3333
 Info : Listening on port 3333 for gdb connections
-Info : [esp32s3.cpu0] Debug controller was reset.
-Info : [esp32s3.cpu0] Core was reset.
-Info : [esp32s3.cpu1] Debug controller was reset.
-Info : [esp32s3.cpu1] Core was reset.
-Info : [esp32s3.cpu0] Target halted, PC=0x403791EE, debug_reason=00000000
-Info : [esp32s3.cpu0] Reset cause (21) - (USB UART reset)
-Info : [esp32s3.cpu1] Target halted, PC=0x403791EE, debug_reason=00000000
-Info : [esp32s3.cpu1] Reset cause (21) - (USB UART reset)
 ```
 
 
 ## Debug
 
-Since ESP32 have a seris different models, you should use the correct gdb command according to your chip:
+Launch another terminal:
 
-- for ESP32: xtensa-esp32-elf-gdb
-- for ESP32 S2: xtensa-esp32s2-elf-gdb
-- for ESP32 S3: xtensa-esp32s3-elf-gdb
-- for ESP32 C3/C6: riscv32-esp-elf-gdb
-
-Using blink as example:
 ```
-XXX-gdb build/blink.elf
+cd blink
+idf.py gdb
 ```
 
 When `(gdb)` prompt showed:
